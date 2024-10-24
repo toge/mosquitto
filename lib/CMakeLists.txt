@@ -130,6 +130,16 @@ if (WITH_STATIC_LIBRARIES)
 
 	target_link_libraries(libmosquitto_static ${LIBRARIES})
 
+	if (WITH_THREADING)
+		if(WIN32)
+		  target_link_libraries(libmosquitto_static PThreads4W::PThreads4W)
+	  else()
+		  set(THREADS_PREFER_PTHREAD_FLAG ON)
+		  find_package(Threads REQUIRED)
+		  target_link_libraries(libmosquitto_static Threads::Threads)
+	  endif()
+	endif()
+
 	set_target_properties(libmosquitto_static PROPERTIES
 		OUTPUT_NAME mosquitto_static
 		VERSION ${VERSION}
